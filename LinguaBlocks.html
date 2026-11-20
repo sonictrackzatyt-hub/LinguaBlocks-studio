@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title data-id="th-modified">LinguaBlocks Studio</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts Inter & Fira Code -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['Inter', 'sans-serif'],
+mono: ['Fira Code', 'monospace']
+},
+animation: {
+'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+'spin-slow': 'spin 12s linear infinite',
+'float': 'float 4s ease-in-out infinite',
+'glow': 'glow 2s ease-in-out infinite alternate',
+'gear-spin': 'gearSpin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+'toolbox-toggle': 'toolboxToggle 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+'sim-bounce': 'simBounce 0.5s ease-out',
+},
+keyframes: {
+float: {
+'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+'50%': { transform: 'translateY(-12px) rotate(2deg)' },
+},
+glow: {
+'0%': { filter: 'drop-shadow(0 0 15px rgba(99, 102, 241, 0.4))' },
+'100%': { filter: 'drop-shadow(0 0 35px rgba(236, 72, 153, 0.8))' }
+},
+gearSpin: {
+'0%': { transform: 'rotate(0deg)' },
+'100%': { transform: 'rotate(180deg)' }
+},
+toolboxToggle: {
+'0%': { transform: 'scale(1) rotate(0deg)' },
+'50%': { transform: 'scale(1.35) rotate(-15deg)' },
+'100%': { transform: 'scale(1) rotate(0deg)' }
+},
+simBounce: {
+'0%': { transform: 'scale(0.9) translateY(2px)' },
+'50%': { transform: 'scale(1.1) translateY(-2px)' },
+'100%': { transform: 'scale(1) translateY(0)' }
+}
+}
+}
+}
+}
+</script>
+<style>
+body { font-family: 'Inter', sans-serif; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #030712; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+.ripple-ring {
+position: absolute;
+border-radius: 50%;
+border: 1px solid rgba(129, 140, 248, 0.3);
+animation: ripple 3s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+.ripple-ring:nth-child(2) { animation-delay: 1s; }
+.ripple-ring:nth-child(3) { animation-delay: 2s; }
+
+@keyframes ripple {
+0% { width: 80px; height: 80px; opacity: 0.8; }
+100% { width: 360px; height: 360px; opacity: 0; }
+}
+
+@keyframes fanSpin {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
+.animate-fan {
+animation: fanSpin var(--fan-speed, 0.15s) linear infinite;
+}
+
+.tab-indicator {
+transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn-text {
+transition: color 0.25s ease, font-weight 0.25s ease;
+}
+</style>
+<meta property="og:title" content="LinguaBlocks Studio" data-id="th-modified" ><meta name="description" content="LinguaBlocks Studio (2)" data-id="th-modified" ><meta property="og:description" content="LinguaBlocks Studio (2)" data-id="th-modified" ><meta property="og:image" content="https://tiiny.host/assets/logo-purple-bg.png" data-id="th-modified" ><meta property="og:image:width" content="1501" data-id="th-modified" ><meta property="og:image:height" content="1501" data-id="th-modified" ><meta property="og:image:type" content="image/png" data-id="th-modified" ><meta property="og:url" content="https://linguablocksstudio.tiiny.site/" data-id="th-modified" ><meta property="og:type" content="website" data-id="th-modified" ><script defer data-domain="linguablocksstudio.tiiny.site" src="https://analytics.tiiny.net/js/plausible.js"></script><script type="text/javascript" src="https://tiiny.host/ad-script.js"></script></head>
+<body class="h-full bg-slate-950 text-slate-100 overflow-hidden flex flex-col select-none">
+
+<div id="intro-screen" class="fixed inset-0 z-50 bg-slate-950 flex flex-col items-center justify-center transition-all duration-700 overflow-hidden">
+<canvas id="intro-canvas" class="absolute inset-0 pointer-events-auto cursor-crosshair opacity-60"></canvas>
+<div class="absolute flex items-center justify-center pointer-events-none">
+<div class="ripple-ring"></div>
+<div class="ripple-ring"></div>
+<div class="ripple-ring"></div>
+</div>
+
+<div class="relative z-10 flex flex-col items-center max-w-md px-6 text-center pointer-events-none">
+<div class="relative mb-8 group pointer-events-auto">
+<div class="absolute -inset-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl blur-xl opacity-75 animate-pulse-slow"></div>
+<div class="relative w-32 h-32 bg-slate-900 border border-slate-700/80 rounded-3xl flex items-center justify-center shadow-2xl animate-float animate-glow overflow-hidden">
+<!-- Dynamic interlocking blocks logo representing block-based programming -->
+<div class="absolute inset-3 grid grid-cols-2 gap-2 p-1.5 bg-slate-950/80 rounded-2xl border border-indigo-500/30">
+<div class="bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center shadow-md animate-pulse">
+<i class="fa-solid fa-cube text-white text-lg"></i>
+</div>
+<div class="bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center shadow-md animate-pulse" style="animation-delay: 0.5s;">
+<i class="fa-solid fa-puzzle-piece text-white text-lg"></i>
+</div>
+<div class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md animate-pulse" style="animation-delay: 1s;">
+<i class="fa-solid fa-code text-white text-sm"></i>
+</div>
+<div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-md animate-pulse" style="animation-delay: 1.5s;">
+<i class="fa-solid fa-microchip text-white text-sm"></i>
+</div>
+</div>
+</div>
+</div>
+
+<h1 class="text-3xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-indigo-300 via-purple-200 to-pink-300 bg-clip-text text-transparent mb-4 leading-tight">
+LinguaBlocks Studio
+</h1>
+
+<div class="min-h-[2.5rem] mb-6 flex items-center justify-center px-2">
+<span id="typed-text" class="text-indigo-300/90 text-xs sm:text-sm md:text-base font-mono tracking-wide leading-normal"></span>
+<span id="typed-cursor" class="w-2 h-4 bg-indigo-400 ml-1 animate-pulse shrink-0"></span>
+</div>
+
+<div class="w-64 h-2 bg-slate-900/90 border border-slate-800 rounded-full overflow-hidden p-0.5 mb-6 shadow-inner relative">
+<div id="loading-bar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full w-0 transition-all duration-300 shadow-lg shadow-indigo-500/50"></div>
+</div>
+
+<div class="flex items-center justify-between w-full text-xs pointer-events-auto">
+<div id="loading-status-text" class="text-slate-400 font-mono flex items-center gap-2">
+<i class="fa-solid fa-circle-notch animate-spin text-indigo-400 text-[10px]"></i>
+<span>Initializing Engine...</span>
+</div>
+<button onclick="dismissIntro()" class="px-4 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/60 text-slate-300 text-xs font-semibold transition flex items-center gap-2">
+<span>Skip Intro</span>
+<i class="fa-solid fa-angles-right text-[10px] text-pink-400"></i>
+</button>
+</div>
+</div>
+</div>
+
+<header class="h-16 border-b border-slate-800 bg-slate-900/90 backdrop-blur flex items-center justify-between px-4 sm:px-6 z-20 shrink-0">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 border border-indigo-400/30 p-2 relative overflow-hidden group">
+<div class="absolute inset-0 bg-indigo-500/20 group-hover:bg-indigo-500/30 transition"></div>
+<div class="relative w-full h-full flex items-center justify-center text-white">
+<i class="fa-solid fa-puzzle-piece text-base drop-shadow-md"></i>
+</div>
+</div>
+<div>
+<span class="font-bold text-sm sm:text-base tracking-tight bg-gradient-to-r from-indigo-400 to-purple-300 bg-clip-text text-transparent">LinguaBlocks Studio</span>
+<span class="hidden sm:inline text-[10px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 ml-2 font-mono">v2.5 Pro</span>
+</div>
+</div>
+
+<div class="flex items-center gap-2 sm:gap-3">
+<button onclick="clearWorkspace()" class="px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 text-xs font-medium transition flex items-center gap-2 border border-slate-700/50" title="Clear Workspace">
+<i class="fa-solid fa-trash-can text-rose-400"></i>
+<span class="hidden md:inline">Clear</span>
+</button>
+<button onclick="generateCode()" class="px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 text-xs font-medium transition flex items-center gap-2 border border-slate-700/50" title="View Source Code">
+<i class="fa-solid fa-code text-cyan-400"></i>
+<span class="hidden md:inline">Code</span>
+</button>
+<button id="run-toggle-btn" onclick="toggleRunProject()" class="px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-semibold tracking-wide transition shadow-lg shadow-emerald-600/20 flex items-center gap-2 border border-emerald-500/30 active:scale-95">
+<i id="run-toggle-icon" class="fa-solid fa-play text-xs"></i>
+<span id="run-toggle-text">Run Program</span>
+</button>
+</div>
+</header>
+
+<!-- Mobile Navigation Tab Bar -->
+<div class="lg:hidden flex bg-slate-900 border-b border-slate-800 shrink-0 relative">
+<button onclick="switchTab('toolbox')" id="tab-btn-toolbox" class="flex-1 py-3 text-xs font-semibold text-indigo-400 flex items-center justify-center gap-1.5 transition relative z-10">
+<i id="icon-toolbox" class="fa-solid fa-box-open text-xs transition-transform duration-300"></i>
+<span id="text-toolbox" class="tab-btn-text text-[11px] font-bold">1. Toolbox</span>
+</button>
+
+<button onclick="switchTab('workspace')" id="tab-btn-workspace" class="flex-1 py-3 text-xs font-medium text-slate-400 flex items-center justify-center gap-1.5 transition relative z-10">
+<i id="icon-workspace" class="fa-solid fa-gear text-xs transition-transform duration-300"></i>
+<span id="text-workspace" class="tab-btn-text text-[11px]">2. Workspace (<span id="mobile-count">0</span>)</span>
+</button>
+
+<button onclick="switchTab('simulator')" id="tab-btn-simulator" class="flex-1 py-3 text-xs font-medium text-slate-400 flex items-center justify-center gap-1.5 transition relative z-10">
+<i id="icon-simulator" class="fa-solid fa-display text-xs transition-transform duration-300"></i>
+<span id="text-simulator" class="tab-btn-text text-[11px]">3. Simulator</span>
+</button>
+
+<!-- Dynamic Smooth Sliding Indicator Bar -->
+<div id="tab-indicator-bar" class="tab-indicator absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-full w-1/3"></div>
+</div>
+
+<div class="flex-1 flex overflow-hidden relative">
+
+<!-- Panel 1: Toolbox -->
+<div id="panel-toolbox" class="w-full lg:w-80 bg-slate-900/90 border-r border-slate-800 flex flex-col select-none shrink-0 absolute inset-0 lg:relative z-10 transition-transform">
+<div class="p-3.5 border-b border-slate-800 flex items-center justify-between">
+<h2 class="text-xs font-bold tracking-wider text-slate-400 uppercase flex items-center gap-2">
+<i class="fa-solid fa-toolbox text-indigo-400"></i>
+<span>Hardware Block Toolbox</span>
+</h2>
+<span class="text-[10px] text-slate-500 font-mono">Tap block to add</span>
+</div>
+<div class="flex-1 overflow-y-auto p-3 space-y-4" id="toolbox-container"></div>
+</div>
+
+<!-- Panel 2: Workspace Canvas -->
+<div id="panel-workspace" class="w-full lg:flex-1 bg-slate-950 relative flex flex-col overflow-hidden hidden lg:flex absolute inset-0 lg:relative z-10 transition-transform">
+<div class="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none"></div>
+
+<div class="p-3.5 border-b border-slate-900 bg-slate-900/40 backdrop-blur flex items-center justify-between z-10 shrink-0">
+<div class="text-xs text-slate-400 font-medium flex items-center gap-2">
+<i class="fa-solid fa-gear text-indigo-400"></i>
+<span class="truncate">Workspace Sequence (Your Program)</span>
+</div>
+<div class="text-xs font-mono text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800 shrink-0" id="block-count">0 blocks</div>
+</div>
+
+<div class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center relative" id="workspace-canvas">
+<div id="workspace-placeholder" class="my-auto text-center p-8 border-2 border-dashed border-slate-800/80 rounded-3xl max-w-sm pointer-events-none">
+<div class="w-14 h-14 bg-slate-900/80 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-slate-800 text-indigo-400">
+<i class="fa-solid fa-microchip text-2xl animate-pulse"></i>
+</div>
+<p class="text-slate-300 text-sm font-semibold mb-1">Your Workspace is Empty</p>
+<p class="text-slate-500 text-xs">Tap hardware blocks from the Toolbox tab to build your automated routine here.</p>
+</div>
+<div id="active-blocks" class="w-full max-w-xl space-y-3 pb-8"></div>
+</div>
+</div>
+
+<!-- Panel 3: Simulator -->
+<div id="panel-simulator" class="w-full lg:w-80 bg-slate-900/90 border-l border-slate-800 flex flex-col shrink-0 hidden lg:flex absolute inset-0 lg:relative z-10 transition-transform">
+
+<div class="p-3.5 border-b border-slate-800 bg-slate-950/50 flex-1 overflow-y-auto space-y-6">
+<div>
+<h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase flex items-center gap-2 mb-3">
+<i class="fa-solid fa-display text-cyan-400"></i>
+<span>Live Hardware Components</span>
+</h3>
+
+<div class="space-y-3">
+<!-- Screen Component (Expanded Widescreen View with visible idle state) -->
+<div id="sim-screen" class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300 shadow-md">
+<div class="w-full aspect-video bg-black/90 rounded-xl border-2 border-slate-800 flex flex-col items-center justify-center relative overflow-hidden shadow-inner p-3 group" id="sim-screen-display">
+<i class="fa-solid fa-tv text-slate-500 text-2xl mb-1.5 group-hover:scale-110 transition-transform duration-300"></i>
+<span class="text-[11px] font-mono font-semibold text-slate-300 tracking-wide text-center">DISPLAY IDLE</span>
+<span class="text-[9px] font-mono text-indigo-400/80 mt-0.5">Ready for commands</span>
+</div>
+<div class="w-full flex items-center justify-between mt-2 px-1">
+<span class="text-[10px] font-semibold text-slate-300 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span> Display Panel
+</span>
+<span class="text-[9px] font-mono text-slate-500">1920x1080 PX</span>
+</div>
+</div>
+
+<div class="grid grid-cols-3 gap-2">
+<!-- Motor & Fan Component -->
+<div id="sim-motor" class="bg-slate-900 border border-slate-800 rounded-xl p-2 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300">
+<div class="w-full aspect-square bg-slate-950 rounded-lg border border-slate-800 flex items-center justify-center relative">
+<div id="fan-blade" class="w-8 h-8 rounded-full border-2 border-dashed border-indigo-400/60 flex items-center justify-center transition-transform">
+<i class="fa-solid fa-fan text-indigo-400 text-xs"></i>
+</div>
+</div>
+<span class="text-[9px] font-semibold text-slate-400 mt-1 truncate">Motor</span>
+</div>
+
+<!-- Light Component -->
+<div id="sim-light" class="bg-slate-900 border border-slate-800 rounded-xl p-2 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-300">
+<div class="w-full aspect-square b
